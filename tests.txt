@@ -36,3 +36,4 @@ ETAPES
 DEROULEMENT :
 
 09/12 : On va commencer par mettre en place la mémoire distribuée MPI. On va s'intérésser dans un premier temps à la fonction golden_claw_search.
+POurquoi ne pas faire de slave master ? car ici on a des tâches dont le temps est uniforme donc il n'y a aucune utilité de le faire.
