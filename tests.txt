@@ -1,0 +1,38 @@
+tests
+
+./mitm --n 15 --C0 f57541a84d3cc0e6 --C1 a286b2c9a185784f
+./mitm --n 3 --C0 306db76a409fa8d7 --C1 01c5d5cdc29221f9
+./mitm --n 5 --C0 d21e8b58e90d73b0 --C1 07d287f02127b415
+
+Questions :
+- demander aux prof d'expliquer la fonction "int dict_probe(u64 key, int maxval, u64 values[])", l'interet de l'argument maxval non compris
+- des précisions sur u64 k 
+
+plan 
+-> utiliser MPI car OopenMP n'a pas de memoire
+->il faut paralleliser les boucles for en utilisant 
+-> on fait un sharding horizontal sur le dict -> on divise le tableau en p categories (nombre de processeurs), modulo[p] les categories sont le reste de la division euclienne par p : 
+r dans {0, 1, ..., p-1} de la clé par p.
+-> pour chaque case i du dict, on envoie au processeur i
+-> HORIZONTAL chaque shard possede toutes les colonnes mais pas toutes les lignes
+un ordinateur = 1 node du cluster
+chaque node ont plusieurs processeurs et une mémoire commune
+-> on fait les sendrecv dans des buffers, pas d'ecriture dans le dict par les fonctions MPI
+
+
+ETAPES 
+1)Chiffrement direct avec K1​ :
+    L'attaquant chiffre le texte en clair P avec toutes les clés possibles pour K1​ et stocke les résultats intermédiaires M (texte partiellement chiffré) dans une table.
+    Cette table est indexée par le résultat intermédiaire M et contient la clé K1​ utilisée.
+
+2)Déchiffrement inverse avec K2​ :
+    L'attaquant prend le texte chiffré C et essaie de déchiffrer avec toutes les clés possibles pour K2​, générant également des résultats intermédiaires M′.
+
+3)Correspondance (meet-in-the-middle) :
+    L'attaquant cherche une correspondance entre M (issu du chiffrement avec K1​) et M′ (issu du déchiffrement avec K2​).
+    Une correspondance valide révèle les clés K1​ et K2​
+
+
+DEROULEMENT :
+
+09/12 : On va commencer par mettre en place la mémoire distribuée MPI. On va s'intérésser dans un premier temps à la fonction golden_claw_search.
